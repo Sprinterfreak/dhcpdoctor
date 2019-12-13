@@ -13,6 +13,12 @@ CLIENT_ID = None
 If not set the MAC address of conf.iface from scapy is used.',
 """
 
+OPT_HOSTNAME = "doctor"
+"""str: Request hostname option.
+
+Add hostname to DHCPDISCOVER request.
+"""
+
 PROTOCOL = 4
 """int: DHCP protocol to operate in.
 

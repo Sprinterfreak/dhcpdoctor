@@ -179,7 +179,7 @@ class DHCPv4Client(DHCPClient):
             IP(src="0.0.0.0", dst="255.255.255.255")
             / UDP(sport=68, dport=67)
             / BOOTP(chaddr=hw, xid=self.xid, flags=0x8000)
-            / DHCP(options=[("message-type", "discover"), "end"])
+            / DHCP(options=[("message-type", "discover"), ("hostname", settings.OPT_HOSTNAME), "end"])
         )
         # TODO: param req list
         if settings.DEBUG:
@@ -414,6 +414,13 @@ def parse_cmd_args():
         help='send relayed requests from specified address. Defaults to address of the interface requests are sent from.',
     )
     parser.add_argument(
+        '--opt-hostname',
+        dest='OPT_HOSTNAME',
+        type=str,
+        required=False,
+        help='use given hostname in dhcpdiscover packets.',
+    )
+    parser.add_argument(
         '--timeout',
         dest='TIMEOUT',
         type=int,
@@ -424,6 +431,7 @@ def parse_cmd_args():
         PROTOCOL=settings.PROTOCOL,
         TIMEOUT=settings.TIMEOUT,
         CLIENT_ID=settings.CLIENT_ID,
+        OPT_HOSTNAME=settings.OPT_HOSTNAME,
     )
     args = parser.parse_args()
     # argument validation
@@ -434,6 +442,7 @@ def parse_cmd_args():
     settings.DEBUG = args.DEBUG
     settings.IFACE = args.IFACE
     settings.CLIENT_ID = args.CLIENT_ID
+    settings.OPT_HOSTNAME = args.OPT_HOSTNAME
     settings.TIMEOUT = args.TIMEOUT
     settings.PROTOCOL = args.PROTOCOL
     if args.SERVER_ADDRESS:
